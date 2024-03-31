@@ -37,7 +37,7 @@ python3 EnumParameter.py  -t www.paginaweb.com.pe -e jpeg -v -o urls.txt
 jpg,png,jpeg,doc,pdf,xls,ppt,mp3,mp4,zip,rar,gif,bmp,tiff,wav
 ```
 ## Objetivo 
-Es depurar los endpoints fuera de servicio, y poder realiza el fuzzin de vulnerabilidades de manera más optima, ejemplo esta PoC con urls disponibles depuradas con EnumParameter
+Es depurar los endpoints fuera de servicio, y poder realizar el fuzzing de manera más optima, ejemplo esta PoC con urls depuradas con EnumParameter
 ![image](https://github.com/HernanRodriguez1/EnumParameter/assets/66162160/089abadc-7fe3-4f1c-a13f-2144de37f848)
 
 
