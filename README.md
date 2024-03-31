@@ -17,14 +17,14 @@ Es una herramienta de enumeración web diseñada para ayudar en tareas de bug bo
 
 ## Extraer endpoints desde Internet Archive
 ```sh
-python3 EnumParameter.py  -t www.mibanco.com.pe -e jpeg -o urls.txt
+python3 EnumParameter.py  -t www.paginaweb.com.pe -e jpeg -o urls.txt
 ```
 ![1](https://github.com/HernanRodriguez1/EnumParameter/assets/66162160/a2ce5d97-331c-4927-82c7-6defc7d937fe)
 
 
 ## Extraer endpoints desde Internet Archive y validar su disponibilidad de los recursos
 ```sh
-python3 EnumParameter.py  -t www.mibanco.com.pe -e jpeg -v -o urls.txt
+python3 EnumParameter.py  -t www.paginaweb.com.pe -e jpeg -v -o urls.txt
 ```
 ![2](https://github.com/HernanRodriguez1/EnumParameter/assets/66162160/b76c6292-ee64-4e42-89cf-1da0243389a0)
 
