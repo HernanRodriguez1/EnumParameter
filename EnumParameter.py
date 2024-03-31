@@ -23,8 +23,7 @@ def conector(url):
             return respuesta.text, respuesta.status_code, respuesta.headers
     except requests.exceptions.RequestException as e:
         print(e)
-        return "", 404, {}  # Retorna código de estado 404 en caso de excepción
-
+        return "", 404, {}  
 def procesar_url(url, lista_negra, args, urls_validas, urls_imprimidas, archivo_salida):
     parsed = urlparse(url)
     if parsed.netloc == args.dominio and parsed.query:
@@ -36,7 +35,7 @@ def procesar_url(url, lista_negra, args, urls_validas, urls_imprimidas, archivo_
                 if url_modificada not in urls_imprimidas:
                     urls_imprimidas.add(url_modificada)
                     contenido, status_code, headers = conector(url_modificada)
-                    if status_code in {200, 301, 302, 401, 403, 500}:  # Se consideran válidas las respuestas 200, 301, 302, 401, 403 y 500
+                    if status_code in {200, 301, 302, 401, 403, 500}: 
                         urls_validas.add(url_modificada)
                         if status_code == 200:
                             print(f"[{Fore.GREEN}+{Style.RESET_ALL}] {url_modificada}")
@@ -70,7 +69,7 @@ def principal():
     intentos = 0
     respuesta = ""
     while reintentar and intentos <= args.intentos:
-        respuesta, _, _ = conector(url)  # Solo necesitamos el contenido de la respuesta, por lo que ignoramos el código de estado y las cabeceras
+        respuesta, _, _ = conector(url) 
         if not respuesta:
             reintentar = True
             intentos += 1
@@ -79,9 +78,9 @@ def principal():
     if not respuesta:
         return
 
-    lista_negra = set()  # Inicializar lista_negra como un conjunto
-    urls_validas = set()  # Inicializar urls_validas como un conjunto
-    urls_imprimidas = set()  # Inicializar urls_imprimidas como un conjunto
+    lista_negra = set()  
+    urls_validas = set() 
+    urls_imprimidas = set() 
 
     if args.excluir:
         if "," in args.excluir:
@@ -96,11 +95,9 @@ def principal():
         print("[!] No hay extensiones para excluir.")
         args.excluir = None
 
-    # Banner grabbing del servidor
     contenido, _, headers = conector(f"http://{args.dominio}")
     print(f"Cabeceras válidas: {headers}\n")
 
-    # Procesamiento adicional para las URLs y exportación si es necesario
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         future_to_url = {executor.submit(procesar_url, url, lista_negra, args, urls_validas, urls_imprimidas, args.salida): url for url in set(respuesta.split())}
         for future in concurrent.futures.as_completed(future_to_url):
