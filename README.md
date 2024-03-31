@@ -14,6 +14,9 @@ Es una herramienta de enumeración web diseñada para ayudar en tareas de bug bo
 
 - **Banner grabbing del servidor:** Realiza una solicitud adicional a la raíz del dominio para obtener y mostrar las cabeceras válidas del servidor, lo que proporciona información sobre la tecnología utilizada y puede ayudar en la identificación de vulnerabilidades.
 
+## Requisitos previos:
+Python 3.x
+Módulos Python: requests, colorama
 
 ## Extraer endpoints desde Internet Archive
 ```sh
@@ -33,10 +36,10 @@ python3 EnumParameter.py  -t www.paginaweb.com.pe -e jpeg -v -o urls.txt
 ```sh
 jpg,png,jpeg,doc,pdf,xls,ppt,mp3,mp4,zip,rar,gif,bmp,tiff,wav
 ```
+## Objetivo 
+Es depurar los endpoints fuera de servicio, y poder realiza el fuzzin de vulnerabilidades de manera más optima, ejemplo esta PoC con urls disponibles depuradas con EnumParameter
+![image](https://github.com/HernanRodriguez1/EnumParameter/assets/66162160/089abadc-7fe3-4f1c-a13f-2144de37f848)
 
-## Requisitos previos:
-Python 3.x
-Módulos Python: requests, colorama
 
 ## Contribuciones y problemas:
 Si encuentras algún problema o tienes alguna sugerencia de mejora, no dudes en abrir un problema en este repositorio. ¡Las contribuciones también son bienvenidas!
