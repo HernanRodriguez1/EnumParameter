@@ -8,15 +8,14 @@ import urllib3
 # ⚠️ Desactiva advertencias SSL (cuando se use verify=False)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-print(Fore.RED + """
-     ______                      ____                                  
-    / ____/___  __  ______ ___  / __ \\____ __________ _____ ___  ___  
-   / __/ / __ \\/ / / / __ `__ \\/ /_/ / __ `/ ___/ __ `/ __ `__ \\/ _ \\ 
-  / /___/ / / / /_/ / / / / / / ____/ /_/ / /  / /_/ / / / / / /  __/ 
- /_____/_/ /_/\\__,_/_/ /_/ /_/_/    \\__,_/_/   \\__,_/_/ /_/ /_/\\___/  
-                                                                      
-Create By: Hernan Rodriguez | Team Offsec Peru
-""" + Style.RESET_ALL)
+print(Fore.RED + """\n
+    ______                      ____                                  __           
+   / ____/___  __  ______ ___  / __ \____ __________ _____ ___  ___  / /____  _____
+  / __/ / __ \/ / / / __ `__ \/ /_/ / __ `/ ___/ __ `/ __ `__ \/ _ \/ __/ _ \/ ___/
+ / /___/ / / / /_/ / / / / / / ____/ /_/ / /  / /_/ / / / / / /  __/ /_/  __/ /    
+/_____/_/ /_/\__,_/_/ /_/ /_/_/    \__,_/_/   \__,_/_/ /_/ /_/\___/\__/\___/_/     
+                                                                                 
+Create By: Hernan Rodriguez | Team Offsec Peru \n""" + Style.RESET_ALL)
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 
