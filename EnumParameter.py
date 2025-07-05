@@ -5,6 +5,7 @@ from urllib.parse import urlparse, parse_qs, urlunparse
 from colorama import Fore, Style
 import urllib3
 
+# ⚠️ Desactiva advertencias SSL (cuando se use verify=False)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 print(Fore.RED + """\n
@@ -37,14 +38,25 @@ def conector(url):
         print(e)
         return "", 404, {}
 
-def procesar_url(url, lista_negra, args, urls_validas, urls_imprimidas, archivo_salida):
+def procesar_url(url, lista_negra, args, urls_validas, urls_imprimidas, archivo_salida, params_vistos):
     parsed = urlparse(url)
     if parsed.netloc == args.dominio and parsed.query:
         query_parseado = parse_qs(parsed.query)
         if all(extension not in url for extension in lista_negra) and any(query_parseado.values()):
-            # ✅ CONSERVAR parámetros y valores originales
+            path = parsed.path.lstrip('/')
+            if not query_parseado:
+                return
+            primer_parametro = next(iter(query_parseado))
+            clave = f"{path}?{primer_parametro}"
+
+            if clave in params_vistos:
+                return  # Ya se procesó esta ruta+parametro, ignorar
+
+            params_vistos.add(clave)
+
             query_modificada = parsed.query
             url_modificada = urlunparse((parsed.scheme, parsed.netloc, parsed.path, '', query_modificada, ''))
+
             if args.verificar:
                 if url_modificada not in urls_imprimidas:
                     urls_imprimidas.add(url_modificada)
@@ -55,8 +67,9 @@ def procesar_url(url, lista_negra, args, urls_validas, urls_imprimidas, archivo_
                             print(f"[{Fore.GREEN}+{Style.RESET_ALL}] {url_modificada}")
                         else:
                             print(f"[{Fore.GREEN}+{Style.RESET_ALL}] {url_modificada} - Código de estado: {status_code}")
-                        with open(archivo_salida, "a") as file:
-                            file.write(f"{url_modificada}\n")
+                        if archivo_salida:
+                            with open(archivo_salida, "a", encoding="utf-8") as file:
+                                file.write(f"{url_modificada}\n")
             else:
                 if url_modificada not in urls_imprimidas:
                     urls_imprimidas.add(url_modificada)
@@ -72,6 +85,10 @@ def principal():
     parser.add_argument('--intentos', type=int, default=3, help='Número de reintentos en caso de conexión fallida')
 
     args = parser.parse_args()
+
+    if args.verificar and not args.salida:
+        print(f"{Fore.RED}[!] Debes especificar un archivo de salida con -o cuando usas -v para guardar URLs.{Style.RESET_ALL}")
+        return
 
     if args.subsitios:
         url = f"https://web.archive.org/cdx/search/cdx?url=*.{args.dominio}/*&output=txt&fl=original&collapse=urlkey&page=/"
@@ -94,6 +111,7 @@ def principal():
     lista_negra = set()
     urls_validas = set()
     urls_imprimidas = set()
+    params_vistos = set()
 
     if args.excluir:
         if "," in args.excluir:
@@ -111,15 +129,16 @@ def principal():
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         future_to_url = {
-            executor.submit(procesar_url, url, lista_negra, args, urls_validas, urls_imprimidas, args.salida): url
+            executor.submit(procesar_url, url, lista_negra, args, urls_validas, urls_imprimidas, args.salida, params_vistos): url
             for url in set(respuesta.split())
         }
         for future in concurrent.futures.as_completed(future_to_url):
             pass
 
-    args.dominio = None
-    args.subsitios = None
-    args.intentos = None
+    # Resumen final
+    print(f"\n{Fore.YELLOW}[*] Total URLs encontradas: {len(urls_imprimidas)}{Style.RESET_ALL}")
+    if args.verificar:
+        print(f"{Fore.YELLOW}[*] URLs que respondieron con códigos válidos: {len(urls_validas)}{Style.RESET_ALL}")
 
 if __name__ == '__main__':
     principal()
