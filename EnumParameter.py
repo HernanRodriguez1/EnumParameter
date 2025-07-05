@@ -5,7 +5,6 @@ from urllib.parse import urlparse, parse_qs, urlunparse
 from colorama import Fore, Style
 import urllib3
 
-# ⚠️ Desactiva advertencias SSL (cuando se use verify=False)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 print(Fore.RED + """\n
